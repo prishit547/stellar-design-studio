@@ -61,36 +61,39 @@ function TeamPage() {
 
       <section className="py-24 md:py-32">
         <div className="max-w-[1280px] mx-auto px-5 md:px-10 space-y-24">
-          {team.map((m, i) => (
-            <motion.article
-              key={m.name}
-              initial={{ opacity: 0, y: 40 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-80px" }}
-              transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
-              className={`grid md:grid-cols-12 gap-10 items-center ${i % 2 === 1 ? "md:[&>*:first-child]:order-2" : ""}`}
-            >
-              <div className="md:col-span-5">
-                <div className="relative aspect-[4/5] rounded-[2rem] overflow-hidden bg-gradient-to-br from-sage to-sage/60 grain flex items-center justify-center">
-                  <span className="font-display text-[10rem] leading-none text-ink/15 select-none">{m.initial}</span>
-                  <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between text-ink">
-                    <div>
-                      <p className="text-xs uppercase tracking-[0.2em] opacity-70">{m.role}</p>
+          {team.map((m, i) => {
+            const reversed = i % 2 === 1;
+            return (
+              <motion.article
+                key={m.name}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: "-80px" }}
+                transition={{ duration: 0.8, ease: [0.22, 1, 0.36, 1] }}
+                className="grid md:grid-cols-12 gap-10 items-center"
+              >
+                <div className={`md:col-span-5 ${reversed ? "md:col-start-8" : ""}`}>
+                  <div className="relative aspect-[4/5] rounded-[2rem] overflow-hidden bg-gradient-to-br from-sage to-sage/60 grain flex items-center justify-center">
+                    <span className="font-display text-[10rem] leading-none text-ink/15 select-none">{m.initial}</span>
+                    <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between text-ink">
+                      <div>
+                        <p className="text-xs uppercase tracking-[0.2em] opacity-70">{m.role}</p>
+                      </div>
+                      <span className="font-display italic">— 0{i + 1}</span>
                     </div>
-                    <span className="font-display italic">— 0{i + 1}</span>
                   </div>
                 </div>
-              </div>
-              <div className="md:col-span-6 md:col-start-7">
-                <span className="text-xs uppercase tracking-[0.25em] text-ink-soft">{m.focus}</span>
-                <h2 className="mt-4 font-display text-4xl md:text-6xl tracking-tight leading-[1.02]">{m.name}</h2>
-                <p className="mt-6 text-lg text-ink-soft leading-relaxed max-w-md">{m.bio}</p>
-                <button className="mt-8 inline-flex items-center gap-2 text-sm link-underline">
-                  Read full bio <span aria-hidden>→</span>
-                </button>
-              </div>
-            </motion.article>
-          ))}
+                <div className={`md:col-span-6 ${reversed ? "md:col-start-1 md:row-start-1" : "md:col-start-7"}`}>
+                  <span className="text-xs uppercase tracking-[0.25em] text-ink-soft">{m.focus}</span>
+                  <h2 className="mt-4 font-display text-4xl md:text-6xl tracking-tight leading-[1.02]">{m.name}</h2>
+                  <p className="mt-6 text-lg text-ink-soft leading-relaxed max-w-md">{m.bio}</p>
+                  <button className="mt-8 inline-flex items-center gap-2 text-sm link-underline">
+                    Read full bio <span aria-hidden>→</span>
+                  </button>
+                </div>
+              </motion.article>
+            );
+          })}
         </div>
       </section>
 

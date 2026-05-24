@@ -42,26 +42,28 @@
 
 :root {
   --radius: 0.75rem;
+  --font-display: "Fraunces", ui-serif, Georgia, serif;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
 
-  /* Brand */
-  --ink: oklch(0.22 0.04 256);              /* deep navy #0A1D37 */
-  --ink-soft: oklch(0.38 0.03 256);
-  --ivory: oklch(0.985 0.008 85);           /* warm off-white */
-  --sage: oklch(0.92 0.025 145);            /* soft sage */
-  --gold: oklch(0.74 0.12 70);              /* muted brass */
-  --hairline: oklch(0.86 0.012 256);
+  /* Soft Teal palette */
+  --ink: oklch(0.20 0.015 250);
+  --ink-soft: oklch(0.38 0.012 170);
+  --ivory: oklch(0.995 0.001 160);
+  --sage: oklch(0.96 0.008 170);
+  --gold: oklch(0.60 0.09 185);
+  --hairline: oklch(0.88 0.012 170);
 
   --background: var(--ivory);
   --foreground: var(--ink);
-  --card: oklch(1 0 0);
+  --card: oklch(0.995 0.001 160);
   --card-foreground: var(--ink);
-  --popover: oklch(1 0 0);
+  --popover: oklch(0.995 0.001 160);
   --popover-foreground: var(--ink);
   --primary: var(--ink);
   --primary-foreground: var(--ivory);
   --secondary: var(--sage);
   --secondary-foreground: var(--ink);
-  --muted: oklch(0.96 0.008 85);
+  --muted: oklch(0.96 0.005 170);
   --muted-foreground: var(--ink-soft);
   --accent: var(--gold);
   --accent-foreground: var(--ink);
@@ -70,9 +72,6 @@
   --border: var(--hairline);
   --input: var(--hairline);
   --ring: var(--ink);
-
-  --font-display: "Fraunces", ui-serif, Georgia, serif;
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
 }
 
 @layer base {
