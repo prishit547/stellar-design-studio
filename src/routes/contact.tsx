@@ -53,7 +53,7 @@ function ContactPage() {
 
   return (
     <>
-      <section className="pt-20 pb-20 md:pt-32 md:pb-24 border-b border-hairline">
+      <section className="pt-8 pb-20 md:pt-12 md:pb-24 border-b border-hairline">
         <div className="max-w-[1280px] mx-auto px-5 md:px-10 grid md:grid-cols-12 gap-10">
           <Reveal className="md:col-span-7">
             <span className="text-xs uppercase tracking-[0.25em] text-ink-soft">Contact</span>

@@ -22,28 +22,28 @@ const team = [
     role: "Ophthalmologist",
     focus: "Pediatric & Adult Strabismus",
     bio: "Over a decade of specialized surgical experience in complex strabismus and binocular vision restoration. Dr. Patel is recognized for his meticulous surgical technique and his patience with even the youngest patients.",
-    initial: "HP",
+    img: "/harshad-patel.png",
   },
   {
     name: "Veronique Jotterand, MD",
     role: "Ophthalmologist",
     focus: "Pediatric Ophthalmology",
     bio: "Dr. Jotterand brings deep expertise in early-intervention pediatric eye care. Her child-first approach combines clinical rigor with the calm reassurance families need during their child's first medical encounters.",
-    initial: "VJ",
+    img: "/veronique-jotterand.png",
   },
   {
     name: "Dr. Joanne Myung",
     role: "Optometrist",
     focus: "Comprehensive Optometry",
     bio: "From refractive exams for advanced contact lens fittings to comprehensive dry eye and ocular surface care, Dr. Myung's practice is thorough, preventative, and deeply patient-centric.",
-    initial: "JM",
+    img: "/joanne-myung.png",
   },
 ];
 
 function TeamPage() {
   return (
     <>
-      <section className="pt-20 pb-24 md:pt-32 md:pb-32 border-b border-hairline">
+      <section className="pt-8 pb-24 md:pt-12 md:pb-32 border-b border-hairline">
         <div className="max-w-[1280px] mx-auto px-5 md:px-10 grid md:grid-cols-12 gap-10">
           <Reveal className="md:col-span-7">
             <span className="text-xs uppercase tracking-[0.25em] text-ink-soft">Our specialists</span>
@@ -73,12 +73,15 @@ function TeamPage() {
                 className="grid md:grid-cols-12 gap-10 items-center"
               >
                 <div className={`md:col-span-5 ${reversed ? "md:col-start-8" : ""}`}>
-                  <div className="relative aspect-[4/5] rounded-[2rem] overflow-hidden bg-gradient-to-br from-sage to-sage/60 grain flex items-center justify-center">
-                    <span className="font-display text-[10rem] leading-none text-ink/15 select-none">{m.initial}</span>
-                    <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between text-ink">
-                      <div>
-                        <p className="text-xs uppercase tracking-[0.2em] opacity-70">{m.role}</p>
-                      </div>
+                  <div className="relative aspect-[4/5] rounded-[2rem] overflow-hidden bg-sage shadow-[0_30px_60px_-20px_rgba(10,29,55,0.18)]">
+                    <img
+                      src={m.img}
+                      alt={m.name}
+                      className="absolute inset-0 h-full w-full object-cover object-top"
+                    />
+                    <div className="absolute inset-0 bg-gradient-to-t from-ink/30 via-transparent to-transparent" />
+                    <div className="absolute bottom-6 left-6 right-6 flex items-end justify-between text-ivory">
+                      <p className="text-xs uppercase tracking-[0.2em] opacity-80">{m.role}</p>
                       <span className="font-display italic">— 0{i + 1}</span>
                     </div>
                   </div>

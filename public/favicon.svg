@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100">
+  <!-- White background -->
+  <rect width="100" height="100" fill="white"/>
+
+  <!-- Black arc: 7 o'clock → clockwise over top → 2 o'clock (210° sweep) -->
+  <path d="M 29 86 A 42 42 0 1 1 86 29"
+        stroke="#1C1C1C" stroke-width="11" fill="none" stroke-linecap="round"/>
+
+  <!-- Green arc: 8 o'clock → counter-clockwise through bottom-left → 5 o'clock (90° sweep) -->
+  <path d="M 14 71 A 42 42 0 0 0 71 86"
+        stroke="#5A8C1A" stroke-width="8" fill="none" stroke-linecap="round"/>
+
+  <!-- White separator so arcs don't bleed into iris -->
+  <circle cx="50" cy="50" r="27" fill="white"/>
+
+  <!-- Blue iris -->
+  <circle cx="50" cy="50" r="25" fill="#2A8DC4"/>
+
+  <!-- Pupil -->
+  <circle cx="50" cy="50" r="11" fill="#1C1C1C"/>
+
+  <!-- Highlight -->
+  <circle cx="42" cy="43" r="4.5" fill="white" opacity="0.9"/>
+</svg>
