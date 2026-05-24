@@ -3,8 +3,16 @@
   "installCommand": "npm install",
   "outputDirectory": "dist/client",
   "framework": null,
+  "functions": {
+    "api/server.js": {
+      "runtime": "nodejs22.x",
+      "includeFiles": "dist/server/**",
+      "memory": 512,
+      "maxDuration": 10
+    }
+  },
   "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+    { "source": "/(.*)", "destination": "/api/server" }
   ],
   "headers": [
     {
@@ -14,7 +22,7 @@
       ]
     },
     {
-      "source": "/(.*\\.png|.*\\.svg|.*\\.ico|.*\\.jpg|.*\\.webp)",
+      "source": "/(.*\\.(png|svg|ico|jpg|webp|woff2?))",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=86400" }
       ]
