@@ -3,16 +3,6 @@ import { motion } from "framer-motion";
 import { Reveal } from "@/components/site/Reveal";
 
 export const Route = createFileRoute("/team")({
-  head: () => ({
-    meta: [
-      { title: "Our Team — Socal Family Eye Care" },
-      { name: "description", content: "Meet our board-certified ophthalmologists and optometrists serving Long Beach families with specialized eye care." },
-      { property: "og:title", content: "Our Team — Socal Family Eye Care" },
-      { property: "og:description", content: "Board-certified ophthalmologists and optometrists in Long Beach." },
-      { property: "og:url", content: "/team" },
-    ],
-    links: [{ rel: "canonical", href: "/team" }],
-  }),
   component: TeamPage,
 });
 

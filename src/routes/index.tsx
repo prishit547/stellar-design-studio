@@ -5,17 +5,6 @@ import { Reveal, Stagger, itemVariants } from "@/components/site/Reveal";
 import { HERO_IMG } from "@/lib/site";
 
 export const Route = createFileRoute("/")({
-  head: () => ({
-    meta: [
-      { title: "Socal Family Eye Care — Clarity for a Lifetime" },
-      { name: "description", content: "Boutique pediatric, adult, and surgical eye care in Long Beach. Compassionate clinical excellence for the whole family." },
-      { property: "og:title", content: "Socal Family Eye Care" },
-      { property: "og:description", content: "Premium vision care for the whole family in Long Beach, CA." },
-      { property: "og:url", content: "/" },
-      { property: "og:image", content: HERO_IMG },
-    ],
-    links: [{ rel: "canonical", href: "/" }],
-  }),
   component: HomePage,
 });
 

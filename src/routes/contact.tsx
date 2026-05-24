@@ -5,16 +5,6 @@ import { Reveal } from "@/components/site/Reveal";
 import { CLINIC } from "@/lib/site";
 
 export const Route = createFileRoute("/contact")({
-  head: () => ({
-    meta: [
-      { title: "Contact — Socal Family Eye Care" },
-      { name: "description", content: "Visit, call, or message Socal Family Eye Care in Long Beach, CA. We respond to inquiries within one business day." },
-      { property: "og:title", content: "Contact — Socal Family Eye Care" },
-      { property: "og:description", content: "Book an appointment or reach our Long Beach practice." },
-      { property: "og:url", content: "/contact" },
-    ],
-    links: [{ rel: "canonical", href: "/contact" }],
-  }),
   component: ContactPage,
 });
 

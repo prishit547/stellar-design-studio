@@ -4,16 +4,6 @@ import { useState } from "react";
 import { Reveal, Stagger, itemVariants } from "@/components/site/Reveal";
 
 export const Route = createFileRoute("/services")({
-  head: () => ({
-    meta: [
-      { title: "Services — Socal Family Eye Care" },
-      { name: "description", content: "Pediatric ophthalmology, cataract surgery, strabismus surgery, comprehensive eye care and more in Long Beach, CA." },
-      { property: "og:title", content: "Services — Socal Family Eye Care" },
-      { property: "og:description", content: "Specialized clinical eye care from pediatric through surgical." },
-      { property: "og:url", content: "/services" },
-    ],
-    links: [{ rel: "canonical", href: "/services" }],
-  }),
   component: ServicesPage,
 });
 
