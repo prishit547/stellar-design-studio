@@ -1,7 +1,6 @@
 export const LOGO_URL = "/eye.png";
 
-export const HERO_IMG =
-  "https://lh3.googleusercontent.com/aida/ADBb0ujfSZOM4iPlgE2l7yuBzC1kENMWtfyZ7lNDZYS9jso0X0zFPOdXPJI4qKBbxYJHhlIXZodt7ALKvZnmmsERi20E6NSAJSdqv3XAxZR0OR6xSKr_tks9Nqhl40LBvKAExAoy8QLpH0E3HFEYso5M8Vs537RriKT8LISab3YDFaqWpdW8IouH8v9w7bcJQ-bYhmOgwwXzjl0Cixt9ldVe25H6shmgQWsU7-jLNsc-1-9330_2DXaDLLlQ-w";
+export const HERO_IMG = "/hero-optometrist.png";
 
 export const NAV = [
   { to: "/", label: "Home" },
@@ -17,4 +16,5 @@ export const CLINIC = {
   fax: "562-988-2022",
   email: "info@socalfamilyeye.com",
   address: "3650 Atlantic Ave, Long Beach, CA 90807",
+  mapUrl: "https://maps.app.goo.gl/6288XXpFoBrncHxj9",
 };

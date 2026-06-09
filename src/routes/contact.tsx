@@ -95,7 +95,7 @@ function ContactPage() {
 
             <ul className="divide-y divide-hairline border-y border-hairline">
               {[
-                { k: "Clinic", v: CLINIC.address },
+                { k: "Clinic", v: CLINIC.address, href: CLINIC.mapUrl },
                 { k: "Phone", v: CLINIC.phone, href: CLINIC.phoneHref },
                 { k: "Fax", v: CLINIC.fax },
                 { k: "Email", v: CLINIC.email, href: `mailto:${CLINIC.email}` },
@@ -103,7 +103,13 @@ function ContactPage() {
                 <li key={row.k} className="py-5 flex items-baseline justify-between gap-6">
                   <span className="text-xs uppercase tracking-[0.2em] text-ink-soft">{row.k}</span>
                   {row.href ? (
-                    <a href={row.href} className="text-right link-underline">{row.v}</a>
+                    <a
+                      href={row.href}
+                      className="text-right link-underline"
+                      {...(row.href.startsWith("http") ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                    >
+                      {row.v}
+                    </a>
                   ) : (
                     <span className="text-right">{row.v}</span>
                   )}
@@ -111,13 +117,25 @@ function ContactPage() {
               ))}
             </ul>
 
-            <div className="rounded-2xl overflow-hidden border border-hairline aspect-[4/3] bg-sage/40 relative">
-              <iframe
-                title="Clinic location"
-                src="https://www.google.com/maps?q=3650+Atlantic+Ave,+Long+Beach,+CA+90807&output=embed"
-                className="absolute inset-0 h-full w-full grayscale"
-                loading="lazy"
-              />
+            <div className="space-y-4">
+              <div className="rounded-2xl overflow-hidden border border-hairline aspect-[4/3] bg-sage/40 relative">
+                <iframe
+                  title="Clinic location"
+                  src="https://www.google.com/maps?q=3650+Atlantic+Ave,+Long+Beach,+CA+90807&output=embed"
+                  className="absolute inset-0 h-full w-full grayscale"
+                  loading="lazy"
+                />
+              </div>
+              <div className="text-right">
+                <a
+                  href={CLINIC.mapUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-xs uppercase tracking-[0.15em] text-ink-soft hover:text-ink link-underline inline-flex items-center gap-1"
+                >
+                  Open in Google Maps ↗
+                </a>
+              </div>
             </div>
           </Reveal>
         </div>

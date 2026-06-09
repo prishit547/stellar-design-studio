@@ -14,7 +14,11 @@ export function Footer() {
 
         <div className="md:col-span-3">
           <p className="text-xs uppercase tracking-[0.2em] text-ink-soft mb-4">Visit</p>
-          <p className="text-sm leading-relaxed">{CLINIC.address}</p>
+          <p className="text-sm leading-relaxed">
+            <a href={CLINIC.mapUrl} target="_blank" rel="noopener noreferrer" className="link-underline">
+              {CLINIC.address}
+            </a>
+          </p>
           <p className="text-sm mt-4">
             <a href={CLINIC.phoneHref} className="link-underline">{CLINIC.phone}</a>
           </p>
@@ -36,10 +40,10 @@ export function Footer() {
 
         <div className="md:col-span-2">
           <p className="text-xs uppercase tracking-[0.2em] text-ink-soft mb-4">Hours</p>
-          <ul className="space-y-1 text-sm text-ink-soft">
-            <li>Mon–Fri · 8a–5p</li>
-            <li>Sat · 9a–1p</li>
-            <li>Sun · Closed</li>
+          <ul className="space-y-2 text-sm text-ink-soft">
+            <li>Monday – Friday<br />8:00 AM – 5:00 PM</li>
+            <li className="pt-1">Saturday<br />9:00 AM – 1:00 PM</li>
+            <li className="pt-1">Sunday · Closed</li>
           </ul>
         </div>
       </div>
