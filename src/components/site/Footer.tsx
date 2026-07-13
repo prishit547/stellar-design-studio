@@ -20,10 +20,10 @@ export function Footer() {
             </a>
           </p>
           <p className="text-sm mt-4">
-            <a href={CLINIC.phoneHref} className="link-underline">{CLINIC.phone}</a>
+            Phone: <a href={CLINIC.phoneHref} className="link-underline">{CLINIC.phone}</a>
           </p>
           <p className="text-sm">
-            <a href={`mailto:${CLINIC.email}`} className="link-underline">{CLINIC.email}</a>
+            Email: <a href={`mailto:${CLINIC.email}`} className="link-underline">{CLINIC.email}</a>
           </p>
         </div>
 
