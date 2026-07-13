@@ -23,7 +23,10 @@ export function Footer() {
             Phone: <a href={CLINIC.phoneHref} className="link-underline">{CLINIC.phone}</a>
           </p>
           <p className="text-sm">
-            Email: <a href={`mailto:${CLINIC.email}`} className="link-underline">{CLINIC.email}</a>
+            Fax: <a href={`tel:${CLINIC.fax.replace(/-/g, "")}`} className="link-underline">{CLINIC.fax}</a>
+          </p>
+          <p className="text-sm">
+            <a href={`mailto:${CLINIC.email}`} className="link-underline">{CLINIC.email}</a>
           </p>
         </div>
 
