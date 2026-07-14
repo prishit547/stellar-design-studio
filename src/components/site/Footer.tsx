@@ -45,7 +45,7 @@ export function Footer() {
           <p className="text-xs uppercase tracking-[0.2em] text-ink-soft mb-4">Hours</p>
           <ul className="space-y-2 text-sm text-ink-soft">
             <li>Monday – Friday<br />8:00 AM – 5:00 PM</li>
-            <li className="pt-1">Saturday<br />9:00 AM – 1:00 PM</li>
+            <li className="pt-1">Saturday · Closed</li>
             <li className="pt-1">Sunday · Closed</li>
           </ul>
         </div>
