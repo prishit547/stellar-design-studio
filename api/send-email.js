@@ -181,7 +181,7 @@ export default async function handler(req, res) {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        from: "Socal Family Eye Care <onboarding@resend.dev>",
+        from: "Socal Family Eye Care <noreply@socalfamilyeyecare.com>",
         to: "frontdesk@socalfamilyeyecare.com",
         reply_to: email,
         subject: `New Inquiry from ${name}`,
