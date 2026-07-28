@@ -1,22 +1,29 @@
-import { createServerFn } from "@tanstack/react-start";
-import { z } from "zod";
-import { CLINIC } from "./site";
+export default async function handler(req, res) {
+  // Allow only POST requests
+  if (req.method !== "POST") {
+    res.setHeader("Allow", ["POST"]);
+    return res.status(405).json({ error: `Method ${req.method} Not Allowed` });
+  }
 
-const contactSchema = z.object({
-  name: z.string().min(1, "Name is required"),
-  phone: z.string().optional(),
-  email: z.string().email("Invalid email address"),
-  message: z.string().min(1, "Message is required"),
-});
+  try {
+    const { name, phone, email, message } = req.body;
 
-export const sendContactEmail = createServerFn({ method: "POST" })
-  .validator((data: unknown) => contactSchema.parse(data))
-  .handler(async ({ data }) => {
+    // Validate inputs
+    if (!name || typeof name !== "string" || name.trim().length === 0) {
+      return res.status(400).json({ error: "Name is required" });
+    }
+    if (!email || typeof email !== "string" || !email.includes("@")) {
+      return res.status(400).json({ error: "Valid email address is required" });
+    }
+    if (!message || typeof message !== "string" || message.trim().length === 0) {
+      return res.status(400).json({ error: "Message is required" });
+    }
+
     const resendApiKey = process.env.RESEND_API_KEY;
     if (!resendApiKey) {
-      console.warn("RESEND_API_KEY is not configured on the server. Falling back to console logging.");
-      console.log("Simulating email send for contact form submission:", data);
-      return { success: true, mocked: true };
+      console.warn("RESEND_API_KEY is not configured on Vercel. Simulating successful send.");
+      console.log("Mock contact form submission data:", { name, phone, email, message });
+      return res.status(200).json({ success: true, mocked: true });
     }
 
     const emailHtml = `
@@ -135,31 +142,31 @@ export const sendContactEmail = createServerFn({ method: "POST" })
       <div class="content">
         <div class="field-group">
           <span class="label">Patient Name</span>
-          <div class="value"><strong>${data.name}</strong></div>
+          <div class="value"><strong>${name}</strong></div>
         </div>
         
         <div class="field-group">
           <span class="label">Email Address</span>
-          <div class="value"><a href="mailto:${data.email}" style="color: #0A1D37; text-decoration: underline;">${data.email}</a></div>
+          <div class="value"><a href="mailto:${email}" style="color: #0A1D37; text-decoration: underline;">${email}</a></div>
         </div>
 
         <div class="field-group">
           <span class="label">Phone Number</span>
-          <div class="value">${data.phone || 'Not provided'}</div>
+          <div class="value">${phone || "Not provided"}</div>
         </div>
         
         <div class="field-group" style="margin-top: 30px;">
           <span class="label">Message / Inquiry</span>
-          <div class="message-box">${data.message}</div>
+          <div class="message-box">${message}</div>
         </div>
         
         <div class="btn-container">
-          <a href="mailto:${data.email}?subject=Re: Socal Family Eye Care Contact Submission" class="btn">Reply to Patient</a>
+          <a href="mailto:${email}?subject=Re: Socal Family Eye Care Contact Submission" class="btn">Reply to Patient</a>
         </div>
       </div>
       <div class="footer">
         This inquiry was submitted via the contact form on socalfamilyeyecare.com.<br>
-        Received on ${new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' })} Pacific Time
+        Received on ${new Date().toLocaleString("en-US", { timeZone: "America/Los_Angeles" })} Pacific Time
       </div>
     </div>
   </div>
@@ -167,32 +174,31 @@ export const sendContactEmail = createServerFn({ method: "POST" })
 </html>
     `;
 
-    try {
-      const response = await fetch("https://api.resend.com/emails", {
-        method: "POST",
-        headers: {
-          "Authorization": `Bearer ${resendApiKey}`,
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          from: "Socal Family Eye Care <onboarding@resend.dev>",
-          to: CLINIC.email,
-          reply_to: data.email,
-          subject: `New Inquiry from ${data.name}`,
-          html: emailHtml,
-        }),
-      });
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        "Authorization": `Bearer ${resendApiKey}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: "Socal Family Eye Care <onboarding@resend.dev>",
+        to: "frontdesk@socalfamilyeyecare.com",
+        reply_to: email,
+        subject: `New Inquiry from ${name}`,
+        html: emailHtml,
+      }),
+    });
 
-      if (!response.ok) {
-        const errorText = await response.text();
-        console.error("Resend API failed:", errorText);
-        throw new Error(`Resend email delivery failed with status ${response.status}`);
-      }
-
-      const result = await response.json();
-      return { success: true, messageId: (result as { id: string }).id };
-    } catch (error) {
-      console.error("Error in sendContactEmail server function:", error);
-      throw new Error("Unable to deliver your email at this time.");
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error("Resend API failed:", errorText);
+      return res.status(502).json({ error: "Failed to deliver email via Resend" });
     }
-  });
+
+    const result = await response.json();
+    return res.status(200).json({ success: true, messageId: result.id });
+  } catch (error) {
+    console.error("Error in send-email API handler:", error);
+    return res.status(500).json({ error: "Internal server error" });
+  }
+}

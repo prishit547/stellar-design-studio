@@ -3,7 +3,6 @@ import { useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
 import { Reveal } from "@/components/site/Reveal";
 import { CLINIC } from "@/lib/site";
-import { sendContactEmail } from "@/lib/email";
 
 export const Route = createFileRoute("/contact")({
   component: ContactPage,
@@ -73,7 +72,19 @@ function ContactPage() {
     setSent(false);
 
     try {
-      await sendContactEmail({ name, phone, email, message });
+      const response = await fetch("/api/send-email", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ name, phone, email, message }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || "Failed to send message. Please try again.");
+      }
+
       setSent(true);
       setName("");
       setPhone("");
