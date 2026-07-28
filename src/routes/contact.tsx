@@ -3,42 +3,89 @@ import { useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
 import { Reveal } from "@/components/site/Reveal";
 import { CLINIC } from "@/lib/site";
+import { sendContactEmail } from "@/lib/email";
 
 export const Route = createFileRoute("/contact")({
   component: ContactPage,
 });
 
-function Field({ label, type = "text", as = "input" }: { label: string; type?: string; as?: "input" | "textarea" }) {
+function Field({
+  label,
+  value,
+  onChange,
+  type = "text",
+  as = "input",
+  required = false,
+}: {
+  label: string;
+  value: string;
+  onChange: (v: string) => void;
+  type?: string;
+  as?: "input" | "textarea";
+  required?: boolean;
+}) {
   const [focus, setFocus] = useState(false);
-  const [val, setVal] = useState("");
-  const lifted = focus || val.length > 0;
-  const sharedProps = {
-    onFocus: () => setFocus(true),
-    onBlur: () => setFocus(false),
-    onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => setVal(e.target.value),
-    value: val,
-    className: "w-full bg-transparent border-0 border-b border-hairline focus:border-ink focus:outline-none py-3 text-base transition-colors",
-  };
+  const lifted = focus || value.length > 0;
   return (
     <label className="block relative pt-6">
       <span className={`absolute left-0 transition-all duration-300 pointer-events-none ${lifted ? "top-0 text-xs tracking-[0.18em] uppercase text-ink-soft" : "top-7 text-base text-ink-soft"}`}>
         {label}
       </span>
       {as === "textarea" ? (
-        <textarea rows={4} {...(sharedProps as React.TextareaHTMLAttributes<HTMLTextAreaElement>)} />
+        <textarea
+          rows={4}
+          required={required}
+          onFocus={() => setFocus(true)}
+          onBlur={() => setFocus(false)}
+          onChange={(e) => onChange(e.target.value)}
+          value={value}
+          className="w-full bg-transparent border-0 border-b border-hairline focus:border-ink focus:outline-none py-3 text-base transition-colors"
+        />
       ) : (
-        <input type={type} {...(sharedProps as React.InputHTMLAttributes<HTMLInputElement>)} />
+        <input
+          type={type}
+          required={required}
+          onFocus={() => setFocus(true)}
+          onBlur={() => setFocus(false)}
+          onChange={(e) => onChange(e.target.value)}
+          value={value}
+          className="w-full bg-transparent border-0 border-b border-hairline focus:border-ink focus:outline-none py-3 text-base transition-colors"
+        />
       )}
     </label>
   );
 }
 
 function ContactPage() {
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
+  const [message, setMessage] = useState("");
+
+  const [submitting, setSubmitting] = useState(false);
   const [sent, setSent] = useState(false);
-  const onSubmit = (e: FormEvent) => {
+  const [error, setError] = useState<string | null>(null);
+
+  const onSubmit = async (e: FormEvent) => {
     e.preventDefault();
-    setSent(true);
-    setTimeout(() => setSent(false), 4000);
+    setSubmitting(true);
+    setError(null);
+    setSent(false);
+
+    try {
+      await sendContactEmail({ name, phone, email, message });
+      setSent(true);
+      setName("");
+      setPhone("");
+      setEmail("");
+      setMessage("");
+      setTimeout(() => setSent(false), 5000);
+    } catch (err) {
+      console.error(err);
+      setError(err instanceof Error ? err.message : "Failed to send message. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -66,14 +113,18 @@ function ContactPage() {
             <p className="mt-2 text-sm text-ink-soft">We aim to respond to all inquiries within one business day.</p>
             <form onSubmit={onSubmit} className="mt-10 space-y-2">
               <div className="grid sm:grid-cols-2 gap-6">
-                <Field label="Full name" />
-                <Field label="Phone number" type="tel" />
+                <Field label="Full name" value={name} onChange={setName} required />
+                <Field label="Phone number" value={phone} onChange={setPhone} type="tel" />
               </div>
-              <Field label="Email address" type="email" />
-              <Field label="How can we help you?" as="textarea" />
-              <div className="pt-8 flex items-center gap-6">
-                <button type="submit" className="group inline-flex items-center gap-3 rounded-full bg-ink text-ivory pl-6 pr-2 py-2 text-sm font-medium hover:bg-ink-soft transition-colors">
-                  {sent ? "Message received" : "Submit inquiry"}
+              <Field label="Email address" value={email} onChange={setEmail} type="email" required />
+              <Field label="How can we help you?" value={message} onChange={setMessage} as="textarea" required />
+              <div className="pt-8 flex flex-wrap items-center gap-6">
+                <button
+                  type="submit"
+                  disabled={submitting}
+                  className="group inline-flex items-center gap-3 rounded-full bg-ink text-ivory pl-6 pr-2 py-2 text-sm font-medium hover:bg-ink-soft transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {submitting ? "Sending inquiry..." : sent ? "Message received" : "Submit inquiry"}
                   <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-ivory text-ink transition-transform group-hover:translate-x-0.5">
                     {sent ? "✓" : "→"}
                   </span>
@@ -81,6 +132,11 @@ function ContactPage() {
                 {sent && (
                   <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-sm text-ink-soft">
                     Thank you — we'll be in touch shortly.
+                  </motion.span>
+                )}
+                {error && (
+                  <motion.span initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-sm text-red-600 font-medium">
+                    {error}
                   </motion.span>
                 )}
               </div>
