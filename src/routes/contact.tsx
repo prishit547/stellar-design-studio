@@ -15,6 +15,8 @@ function Field({
   type = "text",
   as = "input",
   required = false,
+  autoComplete,
+  max,
 }: {
   label: string;
   value: string;
@@ -22,9 +24,11 @@ function Field({
   type?: string;
   as?: "input" | "textarea";
   required?: boolean;
+  autoComplete?: string;
+  max?: string;
 }) {
   const [focus, setFocus] = useState(false);
-  const lifted = focus || value.length > 0;
+  const lifted = focus || value.length > 0 || type === "date";
   return (
     <label className="block relative pt-6">
       <span className={`absolute left-0 transition-all duration-300 pointer-events-none ${lifted ? "top-0 text-xs tracking-[0.18em] uppercase text-ink-soft" : "top-7 text-base text-ink-soft"}`}>
@@ -48,6 +52,8 @@ function Field({
           onBlur={() => setFocus(false)}
           onChange={(e) => onChange(e.target.value)}
           value={value}
+          autoComplete={autoComplete}
+          max={max}
           className="w-full bg-transparent border-0 border-b border-hairline focus:border-ink focus:outline-none py-3 text-base transition-colors"
         />
       )}
@@ -59,6 +65,7 @@ function ContactPage() {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
   const [email, setEmail] = useState("");
+  const [dob, setDob] = useState("");
   const [message, setMessage] = useState("");
 
   const [submitting, setSubmitting] = useState(false);
@@ -77,7 +84,7 @@ function ContactPage() {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({ name, phone, email, message }),
+        body: JSON.stringify({ name, phone, email, message, dob }),
       });
 
       if (!response.ok) {
@@ -89,6 +96,7 @@ function ContactPage() {
       setName("");
       setPhone("");
       setEmail("");
+      setDob("");
       setMessage("");
       setTimeout(() => setSent(false), 5000);
     } catch (err) {
@@ -125,9 +133,19 @@ function ContactPage() {
             <form onSubmit={onSubmit} className="mt-10 space-y-2">
               <div className="grid sm:grid-cols-2 gap-6">
                 <Field label="Full name" value={name} onChange={setName} required />
-                <Field label="Phone number" value={phone} onChange={setPhone} type="tel" />
+                <Field label="Email address" value={email} onChange={setEmail} type="email" required />
               </div>
-              <Field label="Email address" value={email} onChange={setEmail} type="email" required />
+              <div className="grid sm:grid-cols-2 gap-6">
+                <Field label="Phone number" value={phone} onChange={setPhone} type="tel" />
+                <Field
+                  label="Date of birth"
+                  value={dob}
+                  onChange={setDob}
+                  type="date"
+                  autoComplete="bday"
+                  max={new Date().toISOString().split("T")[0]}
+                />
+              </div>
               <Field label="How can we help you?" value={message} onChange={setMessage} as="textarea" required />
               <div className="pt-8 flex flex-wrap items-center gap-6">
                 <button

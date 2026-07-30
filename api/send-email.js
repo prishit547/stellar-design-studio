@@ -1,3 +1,18 @@
+function formatDate(dateStr) {
+  if (!dateStr) return "Not provided";
+  const parts = dateStr.split('-');
+  if (parts.length !== 3) return dateStr;
+  const [year, month, day] = parts.map(Number);
+  if (isNaN(year) || isNaN(month) || isNaN(day)) return dateStr;
+  const date = new Date(Date.UTC(year, month - 1, day));
+  return date.toLocaleDateString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+    timeZone: "UTC"
+  });
+}
+
 export default async function handler(req, res) {
   // Allow only POST requests
   if (req.method !== "POST") {
@@ -6,7 +21,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { name, phone, email, message } = req.body;
+    const { name, phone, email, message, dob } = req.body;
 
     // Validate inputs
     if (!name || typeof name !== "string" || name.trim().length === 0) {
@@ -15,6 +30,9 @@ export default async function handler(req, res) {
     if (!email || typeof email !== "string" || !email.includes("@")) {
       return res.status(400).json({ error: "Valid email address is required" });
     }
+    if (dob && typeof dob !== "string") {
+      return res.status(400).json({ error: "Invalid date of birth format" });
+    }
     if (!message || typeof message !== "string" || message.trim().length === 0) {
       return res.status(400).json({ error: "Message is required" });
     }
@@ -22,7 +40,7 @@ export default async function handler(req, res) {
     const resendApiKey = process.env.RESEND_API_KEY;
     if (!resendApiKey) {
       console.warn("RESEND_API_KEY is not configured on Vercel. Simulating successful send.");
-      console.log("Mock contact form submission data:", { name, phone, email, message });
+      console.log("Mock contact form submission data:", { name, phone, email, message, dob });
       return res.status(200).json({ success: true, mocked: true });
     }
 
@@ -153,6 +171,11 @@ export default async function handler(req, res) {
         <div class="field-group">
           <span class="label">Phone Number</span>
           <div class="value">${phone || "Not provided"}</div>
+        </div>
+
+        <div class="field-group">
+          <span class="label">Date of Birth</span>
+          <div class="value">${formatDate(dob)}</div>
         </div>
         
         <div class="field-group" style="margin-top: 30px;">

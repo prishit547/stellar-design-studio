@@ -6,6 +6,21 @@ import tsconfigPaths from "vite-tsconfig-paths";
 
 // Intercept and handle /api/send-email requests locally
 function localApiPlugin() {
+  function formatDate(dateStr?: string) {
+    if (!dateStr) return "Not provided";
+    const parts = dateStr.split('-');
+    if (parts.length !== 3) return dateStr;
+    const [year, month, day] = parts.map(Number);
+    if (isNaN(year) || isNaN(month) || isNaN(day)) return dateStr;
+    const date = new Date(Date.UTC(year, month - 1, day));
+    return date.toLocaleDateString("en-US", {
+      month: "long",
+      day: "numeric",
+      year: "numeric",
+      timeZone: "UTC"
+    });
+  }
+
   return {
     name: "local-api-plugin",
     configureServer(server) {
@@ -33,6 +48,7 @@ function localApiPlugin() {
                 <h3>New message from ${data.name}</h3>
                 <p><strong>Email:</strong> ${data.email}</p>
                 <p><strong>Phone:</strong> ${data.phone || 'N/A'}</p>
+                <p><strong>Date of Birth:</strong> ${formatDate(data.dob)}</p>
                 <p><strong>Message:</strong></p>
                 <p>${data.message}</p>
               `;
